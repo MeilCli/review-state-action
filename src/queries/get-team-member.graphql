@@ -1,0 +1,15 @@
+query GetTeamMember($organization: String!, $name: String!, $after: String) {
+    organization(login: $organization) {
+        team(slug: $name) {
+            members(first: 100, after: $after) {
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+                nodes {
+                    login
+                }
+            }
+        }
+    }
+}

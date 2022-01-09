@@ -1,0 +1,65 @@
+query GetPullRequestTimeline($owner: String!, $name: String!, $pull_request: Int!, $after: String) {
+    repository(owner: $owner, name: $name) {
+        pullRequest(number: $pull_request) {
+            timelineItems(
+                first: 100
+                after: $after
+                itemTypes: [
+                    PULL_REQUEST_REVIEW
+                    REVIEW_DISMISSED_EVENT
+                    REVIEW_REQUEST_REMOVED_EVENT
+                    REVIEW_REQUESTED_EVENT
+                ]
+            ) {
+                pageInfo {
+                    endCursor
+                    hasNextPage
+                }
+                nodes {
+                    __typename
+                    ... on PullRequestReview {
+                        author {
+                            login
+                        }
+                        state
+                    }
+                    ... on ReviewDismissedEvent {
+                        review {
+                            author {
+                                login
+                            }
+                        }
+                    }
+                    ... on ReviewRequestRemovedEvent {
+                        requestedReviewer {
+                            __typename
+                            ... on User {
+                                login
+                            }
+                            ... on Team {
+                                organization {
+                                    login
+                                }
+                                slug
+                            }
+                        }
+                    }
+                    ... on ReviewRequestedEvent {
+                        requestedReviewer {
+                            __typename
+                            ... on User {
+                                login
+                            }
+                            ... on Team {
+                                organization {
+                                    login
+                                }
+                                slug
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

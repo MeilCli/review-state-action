@@ -1,13 +1,15 @@
 import * as core from "@actions/core";
 
 export interface Option {
-    test: string;
+    githubToken: string;
+    configPath: string;
     testOrNull: string | null;
 }
 
 export function getOption(): Option {
     return {
-        test: getInput("test"),
+        githubToken: getInput("github_token"),
+        configPath: getInput("config"),
         testOrNull: getInputOrNull("test_or_null"),
     };
 }
